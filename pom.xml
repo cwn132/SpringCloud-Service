@@ -12,6 +12,7 @@
         <module>cloud-api-commons</module>
         <module>cloud-provide-payment</module>
         <module>cloud-consumer-order</module>
+        <module>cloud-eureka-server</module>
     </modules>
 
 
