@@ -17,10 +17,14 @@
             <artifactId>cloud-api-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 只要我们在 Spring  Boot 项目中的 pom.xml 中引入了 spring-boot-starter-web ，
+        即使不进行任何配置，也可以直接使用 Spring MVC 进行 Web 开发-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- 可以用于检测系统的健康情况、当前的Beans、系统的缓存等-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
