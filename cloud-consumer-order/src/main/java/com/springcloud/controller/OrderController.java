@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j  //Lombok 提供了一个注解，叫做 @log4j。这玩意使用了 Log4J 的库
 public class OrderController {
     //调用支付订单服务端的ip+端口号
-    public static final  String PAYMENT_URL = "http://localhost:8001";
+    public static final  String PAYMENT_URL = "http://mcroservice-payment";
 
     //自动装配，修饰属性，可以自动装配spring容器中相同属性的pojo对象
     //作用是把该类注入到spring容器中，让spring容器来管理该类，别的属性自动装配容器中相同属性时，

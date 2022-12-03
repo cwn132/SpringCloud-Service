@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="cloud-eureka-server01" />
-        <module name="cloud-provide-payment" />
-        <module name="cloud-consumer-order" />
         <module name="cloud-api-commons" />
+        <module name="cloud-provide-payment02" />
+        <module name="cloud-provide-payment01" />
+        <module name="cloud-consumer-order" />
         <module name="cloud-eureka-server02" />
+        <module name="cloud-eureka-server01" />
       </profile>
     </annotationProcessing>
   </component>

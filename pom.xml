@@ -10,10 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>cloud-api-commons</module>
-        <module>cloud-provide-payment</module>
+        <module>cloud-provide-payment01</module>
+        <module>cloud-provide-payment02</module>
         <module>cloud-consumer-order</module>
         <module>cloud-eureka-server01</module>
         <module>cloud-eureka-server02</module>
+
     </modules>
 
 
