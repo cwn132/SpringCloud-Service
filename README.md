@@ -6,6 +6,11 @@ SpringCloud - NingSpace
 - MySQL 8.0.23
 - Mybatis
 
+Note:
+vim /ect/hosts
+127.0.0.1 eureka7001.com
+127.0.0.1 eureka7002.com
+
 目录结构描述
 * cloud-api-commons - SpringCloud API公共接口
 
