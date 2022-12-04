@@ -48,17 +48,24 @@ public class PaymentController {
     }
 
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
-    @PostMapping(value="/payment/create")
+    @PostMapping(value="/payment/create") //创建订单
     public CommonResult create(@RequestBody Payment dept){
 
-        int i = paymentService.create(dept);
+        try {
+            int i = paymentService.create(dept);
 
-        log.info("******插入成功***********"+i);
-        if(i>0){
-            return new CommonResult(200,"插入数据库成功",i);
-        }else{
-            return new CommonResult(444,"插入数据库失败",null);
+            if(i>0){
+                log.info("******插入数据库成功***********"+i);
+                return new CommonResult(200,"插入数据库成功",i);
+            }else{
+                log.info("******插入数据库失败***********"+i);
+                return new CommonResult(444,"插入数据库失败",null);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+
+        return null;
 
     }
 
@@ -68,10 +75,18 @@ public class PaymentController {
         Payment payment = paymentService.queryById(id);
 
         if(payment == null){
+            log.info("******数据不存在***********"+id);
             return new CommonResult(200,"数据不存在",id);
         }else {
-            paymentService.deleteById(id);
-            return new CommonResult(200,"删除成功",id);
+            try{
+                paymentService.deleteById(id);
+                log.info("******删除成功***********"+id);
+                return new CommonResult(200,"删除成功",id);
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+
+            return null;
         }
 
     }
@@ -82,10 +97,17 @@ public class PaymentController {
         Payment payment = paymentService.queryById(dept.getId());
 
         if(payment == null){
+            log.info("******数据不存在***********"+dept.getId());
             return new CommonResult(200,"数据不存在",dept.getId());
         }else {
-            paymentService.updateById(dept);
-            return new CommonResult(200,"更新成功",dept.getId());
+            try {
+                paymentService.updateById(dept);
+                log.info("******更新成功***********" + dept.getId());
+                return new CommonResult(200, "更新成功", dept.getId());
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+            return null;
         }
 
     }
