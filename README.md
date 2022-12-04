@@ -7,6 +7,7 @@ SpringCloud - NingSpace
 - MySQL 8.0.23
 - Mybatis
 - Maven
+- Redis(master: 192.168.0.102:6379; slave: 192.168.0.102:6378)
 
 # Note:
 - vim /ect/hosts
@@ -17,6 +18,7 @@ SpringCloud - NingSpace
 1. cloud-api-commons - SpringCloud API公共接口
 
 2. cloud-provide-payment01 & 02- SpringCloud 服务者01(port:8001)& 02(port:8002) 集群
+* 说明：服务端引用Redis缓存与数据库增删改查同步
 * 根据ID获取支付订单方法： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
 ![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/query.jpg)
 * 创建订单接口方法： create(Payment). 调用: http://localhost:8001/payment/create

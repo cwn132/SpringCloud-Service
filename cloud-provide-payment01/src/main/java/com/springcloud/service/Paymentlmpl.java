@@ -16,8 +16,9 @@ public class Paymentlmpl implements PaymentService{
     //@Override注解告诉你下面这个方法是从父类/接口继承过来的，需要你重写一次
     @Override
     public int create(Payment payment){
-
-        return paymentDao.create(payment);
+        paymentDao.create(payment);
+        int id = payment.getId().intValue();
+        return id;
     }
 
     @Override

@@ -10,6 +10,24 @@ spring:
     url: jdbc:mysql://localhost:3306/db01?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: 19887460
+  redis:
+    host: 192.168.0.102
+    port: 6379
+    password:
+    database: 2
+    timeout: 20000  #如果在一个 timeout 时间内，没有数据的交互，是否断开连接。0代表永不断开
+    #    集群环境打开下面注释，单机不需要打开
+    #    cluster:
+    #      集群信息
+    #      nodes: xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx
+    #      #默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
+    #      maxRedirects: 3
+    lettuce:
+      pool:
+        max-idle: 8    #最大空闲
+        min-idle: 0    #最小空闲
+        max-active: 8  #最大连接数
+        max-wait: -1   #最大阻塞等待时间(负数表示没限制)
 #mybatis:配置
 mybatis:
   mapperLocations: classpath:dao/*.xml
