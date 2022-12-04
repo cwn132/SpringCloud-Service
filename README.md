@@ -30,6 +30,7 @@ SpringCloud - NingSpace
 4. cloud-eureka-server01 & 02 - SpringCloud Eureka注册中心 集群
 * 访问地址eureka01：http://localhost:7001/
 * 访问地址eureka02：http://localhost:7002/
+![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/eureka.jpg)
 
 5. cloud-consumer-feign-order - SpringCloud 消费者服务调用Feign
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8004/consumer/payment/create
