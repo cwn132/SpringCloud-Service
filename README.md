@@ -17,11 +17,15 @@ SpringCloud - NingSpace
 1. cloud-api-commons - SpringCloud API公共接口
 
 2. cloud-provide-payment01 & 02- SpringCloud 服务者01(port:8001)& 02(port:8002) 集群
-* 创建订单接口方法： create(Payment). 调用: http://localhost:8001/payment/create
 * 根据ID获取支付订单方法： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
-* 删除订单接口方法： deleteById(Id). 调用：http://localhost:8001/payment/delete/{id}
+![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/query.jpg)
+* 创建订单接口方法： create(Payment). 调用: http://localhost:8001/payment/create
+![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/create.jpg)
 * 根据ID更新订单方法: updateById(Id). 调用：http://localhost:8001/payment/update
+![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/update.jpg)
+* 删除订单接口方法： deleteById(Id). 调用：http://localhost:8001/payment/delete/{id}
 * 加载服务发现组件discovery - 调用：http://localhost:8001/payment/discovery
+
 
 3. cloud-consumer-order - SpringCloud 消费者 
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8003/consumer/payment/create
