@@ -20,9 +20,18 @@ public class Paymentlmpl implements PaymentService{
         return paymentDao.create(payment);
     }
 
-
     @Override
     public Payment queryById(long id){
         return paymentDao.queryById(id);
+    }
+
+    @Override
+    public int updateById(Payment payment) {
+        return paymentDao.updateById(payment);
+    }
+
+    @Override
+    public int deleteById(Integer id) {
+        return paymentDao.deleteById(id);
     }
 }

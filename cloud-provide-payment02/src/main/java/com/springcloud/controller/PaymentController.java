@@ -62,6 +62,34 @@ public class PaymentController {
 
     }
 
+    @GetMapping(value="/payment/delete/{id}") //删除订单
+    public CommonResult deleteById(@PathVariable("id") Integer id){
+
+        Payment payment = paymentService.queryById(id);
+
+        if(payment == null){
+            return new CommonResult(200,"数据不存在",id);
+        }else {
+            paymentService.deleteById(id);
+            return new CommonResult(200,"删除成功",id);
+        }
+
+    }
+
+    @PostMapping(value="/payment/update") //更新订单
+    public CommonResult updateById(@RequestBody Payment dept){
+
+        Payment payment = paymentService.queryById(dept.getId());
+
+        if(payment == null){
+            return new CommonResult(200,"数据不存在",dept.getId());
+        }else {
+            paymentService.updateById(dept);
+            return new CommonResult(200,"更新成功",dept.getId());
+        }
+
+    }
+
     //如果方法上的@RequestMapping注解没有设置method属性，则get和post请求默认都可以访问
     @RequestMapping("/hello")
     public String hello(){

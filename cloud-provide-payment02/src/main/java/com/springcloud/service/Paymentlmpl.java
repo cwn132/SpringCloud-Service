@@ -3,10 +3,13 @@ package com.springcloud.service;
 import com.springcloud.dao.PaymentDao;
 import com.springcloud.pojo.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-@Service
+
+@Service //加上该注解会将当前类自动注入到spring容器中，不需要再在applicationContext.xml文件定义bean了。
 public class Paymentlmpl implements PaymentService{
+
     @Autowired
     PaymentDao paymentDao;
 
@@ -17,10 +20,18 @@ public class Paymentlmpl implements PaymentService{
         return paymentDao.create(payment);
     }
 
-
     @Override
     public Payment queryById(long id){
         return paymentDao.queryById(id);
     }
 
+    @Override
+    public int updateById(Payment payment) {
+        return paymentDao.updateById(payment);
+    }
+
+    @Override
+    public int deleteById(Integer id) {
+        return paymentDao.deleteById(id);
+    }
 }

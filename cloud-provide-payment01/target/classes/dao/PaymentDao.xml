@@ -19,6 +19,15 @@
     </insert>
 
     <select id="queryById" resultType="com.springcloud.pojo.Payment" parameterType="Long" resultMap="BaseResultMap">
-        select * from payment  where id = #{id};
+        select * from payment where id = #{id};
     </select>
+
+    <update id="updateById" parameterType="com.springcloud.pojo.Payment">
+        update payment set serial=#{serial} where id=#{id};
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from payment where id=#{id};
+    </delete>
+
 </mapper>

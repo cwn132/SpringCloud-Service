@@ -25,6 +25,16 @@ public class PaymentHystrixFallbackService implements PaymentService{
     }
 
     @Override
+    public CommonResult updateById(Payment payment) {
+        return new CommonResult(500,"服务器异常",null);
+    }
+
+    @Override
+    public CommonResult deleteById(Integer id) {
+        return new CommonResult(500,"服务器异常",null);
+    }
+
+    @Override
     public String PaymentFeignTimeOutDefault() {
 
         return "服务器异常 - Time Out";

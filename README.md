@@ -1,5 +1,6 @@
 SpringCloud - NingSpace
 ==============================
+* 说明：此项目为临时搭建实现基本增删改查功能，只作参考
 
 # 一. 基础搭建
 - JDK11
@@ -15,11 +16,11 @@ SpringCloud - NingSpace
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口
 
-2. cloud-provide-payment01 & 02- SpringCloud 服务者01 & 02 集群
-* 创建消费端订单接口方法-服务01： create(Payment). 调用: http://localhost:8001/payment/create
-* 根据ID获取支付订单方法-服务01： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
-* 创建消费端订单接口方法-服务02： create(Payment). 调用: http://localhost:8002/payment/create
-* 根据ID获取支付订单方法-服务02： queryById(Id). 调用: http://localhost:8002/payment/get/{id}
+2. cloud-provide-payment01 & 02- SpringCloud 服务者01(port:8001)& 02(port:8002) 集群
+* 创建订单接口方法： create(Payment). 调用: http://localhost:8001/payment/create
+* 根据ID获取支付订单方法： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
+* 删除订单接口方法： deleteById(Id). 调用：http://localhost:8001/payment/delete/{id}
+* 根据ID更新订单方法: updateById(Id). 调用：http://localhost:8001/payment/update
 * 加载服务发现组件discovery - 调用：http://localhost:8001/payment/discovery
 
 3. cloud-consumer-order - SpringCloud 消费者 
@@ -35,6 +36,8 @@ SpringCloud - NingSpace
 5. cloud-consumer-feign-order - SpringCloud 消费者服务调用Feign
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8004/consumer/payment/create
 * 根据ID获取支付订单方法： getPaymentById(Id). 调用: http://localhost:8004/consumer/payment/get/{id}
+* 删除订单接口方法： deleteById(Id). 调用：http://localhost:8004/payment/delete/{id}
+* 根据ID更新订单方法: updateById(Id). 调用：http://localhost:8004/payment/update
 * 集成超时时间和日志打印 - PaymentFeignTimeOut & FeignConfig
 * 集成Hystrix熔断器 - PaymentHystrixFallbackService
 

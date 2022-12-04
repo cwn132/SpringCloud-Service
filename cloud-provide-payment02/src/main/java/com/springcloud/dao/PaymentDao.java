@@ -13,7 +13,17 @@ import org.apache.ibatis.annotations.Param;
 //@Repository注解便属于最先引入的一批，它用于将数据访问层 (DAO 层 ) 的类标识为 Spring Bean,表明这个类具有对对象CRUD（增删改查）的功能
 @Repository
 public interface PaymentDao {
+
+    //创建payment
     int create(Payment payment);
+
+    //根据ID查询payment
     Payment queryById(@Param("id")long id);
+
+    //根据ID更新payment
+    int updateById(Payment payment);
+
+    //根据ID删除payment
+    int deleteById(@Param("id")Integer id);
 
 }

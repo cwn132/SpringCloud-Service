@@ -4,6 +4,7 @@ package com.springcloud.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.springcloud.dao.PaymentDao;
 import com.springcloud.pojo.CommonResult;
 import com.springcloud.pojo.Payment;
 import com.springcloud.service.PaymentService;
@@ -54,7 +55,7 @@ public class PaymentController {
 
 
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
-    @PostMapping(value="/payment/create")
+    @PostMapping(value="/payment/create") //创建订单
     public CommonResult create(@RequestBody Payment dept){
 
         int i = paymentService.create(dept);
@@ -64,6 +65,34 @@ public class PaymentController {
             return new CommonResult(200,"插入数据库成功",i);
         }else{
             return new CommonResult(444,"插入数据库失败",null);
+        }
+
+    }
+
+    @GetMapping(value="/payment/delete/{id}") //删除订单
+    public CommonResult deleteById(@PathVariable("id") Integer id){
+
+        Payment payment = paymentService.queryById(id);
+
+        if(payment == null){
+            return new CommonResult(200,"数据不存在",id);
+        }else {
+            paymentService.deleteById(id);
+            return new CommonResult(200,"删除成功",id);
+        }
+
+    }
+
+    @PostMapping(value="/payment/update") //更新订单
+    public CommonResult updateById(@RequestBody Payment dept){
+
+        Payment payment = paymentService.queryById(dept.getId());
+
+        if(payment == null){
+            return new CommonResult(200,"数据不存在",dept.getId());
+        }else {
+            paymentService.updateById(dept);
+            return new CommonResult(200,"更新成功",dept.getId());
         }
 
     }
