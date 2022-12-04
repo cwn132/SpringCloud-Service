@@ -11,6 +11,7 @@
         <module name="cloud-consumer-feign-order" />
         <module name="cloud-provide-payment02" />
         <module name="cloud-provide-payment01" />
+        <module name="cloud-gateway9522" />
         <module name="cloud-consumer-order" />
         <module name="cloud-consumer-hystrix-dashboar" />
         <module name="cloud-eureka-server02" />

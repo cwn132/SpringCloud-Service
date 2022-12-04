@@ -6,6 +6,8 @@ import com.springcloud.pojo.Payment;
 import com.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,9 @@ public class PaymentController {
     //注入服务发现的注解
     @Autowired
     private DiscoveryClient discoveryClient;
+
+    @Value("${server.port}")
+    private int serverPort;
 
     //获取服务信息
     @GetMapping("/payment/discovery")
@@ -62,6 +67,13 @@ public class PaymentController {
     public String hello(){
         System.out.println("hello");
         return "hello";
+    }
+
+    //如果方法上的@RequestMapping注解没有设置method属性，则get和post请求默认都可以访问
+    @RequestMapping("/payment/lb")
+    public int getLB(){
+        System.out.println(serverPort);
+        return this.serverPort;
     }
 
     //作为@RequestMapping(value="/payment/get/{id}",method = RequestMethod.GET)的快捷方式。也就是可以简化成@PostMapping(value="/payment/get/{id}" )即可

@@ -17,6 +17,7 @@
         <module>cloud-eureka-server02</module>
         <module>cloud-consumer-feign-order</module>
         <module>cloud-consumer-hystrix-dashboar</module>
+        <module>cloud-gateway9522</module>
 
     </modules>
 

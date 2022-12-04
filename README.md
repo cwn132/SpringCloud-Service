@@ -42,5 +42,15 @@ SpringCloud - NingSpace
 * 加入cloud-provide-payment01监控 - http://localhost:8001/hystrix.stream
 * 加入cloud-consumer-feign-order监控 - http://localhost:8004/hystrix.stream
 
+7. cloud-gateway9522 - SpringCloud Gateway网关
+* 路由服务者MCROSERVICE-PAYMENT - http://localhost:9522/payment/get/1?token=123
+* 查服务者端口 - http://localhost:9522/payment/lb?token=123
+* 添加Token过滤器加token访问 - http://localhost:9522/payment/lb?token=123
+
+
+
+
+
+
 
 
