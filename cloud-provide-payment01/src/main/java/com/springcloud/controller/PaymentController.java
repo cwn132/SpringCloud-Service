@@ -1,22 +1,50 @@
 package com.springcloud.controller;
 
 
+
 import com.springcloud.pojo.CommonResult;
 import com.springcloud.pojo.Payment;
 import com.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @Slf4j
 public class PaymentController {
 
+
+
     @Autowired
     private PaymentService paymentService;
+
+
+    //注入服务发现的注解
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
+    //获取服务信息
+    @GetMapping("/payment/discovery")
+    public Object discovery(){
+        List<String> services = discoveryClient.getServices();
+        for (String s : services){
+            log.info("********注册到eureka中的服务中有:"+services);
+        }
+        //根据服务Id获取对应的服务实例集合
+        List <ServiceInstance> instances = discoveryClient.getInstances("MCROSERVICE-PAYMENT");
+        for (ServiceInstance s: instances) {
+            log.info("当前服务的实例有"+s.getServiceId()+"\t"+s.getHost()+"\t"+s.getPort()+"\t"+s.getUri());
+        }
+        return this.discoveryClient;
+    }
+
 
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
     @PostMapping(value="/payment/create")
