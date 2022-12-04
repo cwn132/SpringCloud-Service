@@ -15,6 +15,7 @@
         <module>cloud-consumer-order</module>
         <module>cloud-eureka-server01</module>
         <module>cloud-eureka-server02</module>
+        <module>cloud-consumer-feign-order</module>
 
     </modules>
 

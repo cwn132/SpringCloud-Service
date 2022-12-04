@@ -31,7 +31,10 @@ SpringCloud - NingSpace
 * 访问地址eureka01：http://localhost:7001/
 * 访问地址eureka02：http://localhost:7002/
 
-
+5. cloud-consumer-feign-order - SpringCloud 消费者服务调用Feign
+* 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8006/consumer/payment/create
+* 根据ID获取支付订单方法： getPaymentById(Id). 调用: http://localhost:8006/consumer/payment/get/{id}
+* 集合超时时间和日志打印 - PaymentFeignTimeOut & FeignConfig
 
 
 
