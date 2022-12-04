@@ -32,3 +32,6 @@ eureka:
     #访问路径可以显示ip地址
     prefer-ip-address: true
 
+feign:
+  hystrix:
+    enabled: true

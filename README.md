@@ -34,9 +34,13 @@ SpringCloud - NingSpace
 5. cloud-consumer-feign-order - SpringCloud 消费者服务调用Feign
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8004/consumer/payment/create
 * 根据ID获取支付订单方法： getPaymentById(Id). 调用: http://localhost:8004/consumer/payment/get/{id}
-* 集合超时时间和日志打印 - PaymentFeignTimeOut & FeignConfig
+* 集成超时时间和日志打印 - PaymentFeignTimeOut & FeignConfig
+* 集成Hystrix熔断器 - PaymentHystrixFallbackService
 
-
+6. cloud-consumer-hystrix-dashboard - SpringCloud Hystrix监控器
+* 控制台 - http://localhost:9001/hystrix
+* 加入cloud-provide-payment01监控 - http://localhost:8001/hystrix.stream
+* 加入cloud-consumer-feign-order监控 - http://localhost:8004/hystrix.stream
 
 
 

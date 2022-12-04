@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @ComponentScan
-@FeignClient(value ="mcroservice-payment")//使用Feign
+@FeignClient(value ="mcroservice-payment",fallback = PaymentHystrixFallbackService.class)//使用Feign
 public interface PaymentService {
 
     @PostMapping("/payment/create")
@@ -21,6 +21,6 @@ public interface PaymentService {
 
     //调用生产者微服务名称为mcroservice-payment下边的模拟超时的接口
     @GetMapping("/payment/feign/timeout")
-    public String PaymentFeignTimeOut() throws InterruptedException;
+    public String PaymentFeignTimeOutDefault() throws InterruptedException;
 
 }
