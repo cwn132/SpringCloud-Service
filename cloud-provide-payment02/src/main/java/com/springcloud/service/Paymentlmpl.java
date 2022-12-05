@@ -2,6 +2,7 @@ package com.springcloud.service;
 
 import com.springcloud.dao.PaymentDao;
 import com.springcloud.pojo.Payment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,14 @@ public class Paymentlmpl implements PaymentService{
     //@Override注解告诉你下面这个方法是从父类/接口继承过来的，需要你重写一次
     @Override
     public int create(Payment payment){
-
-        return paymentDao.create(payment);
+        paymentDao.create(payment);
+        int id = payment.getPaymentId().intValue();
+        return id;
     }
 
     @Override
-    public Payment queryById(long id){
-        return paymentDao.queryById(id);
+    public Payment queryById(@Param("paymentId")Long paymentId){
+        return paymentDao.queryById(paymentId);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class Paymentlmpl implements PaymentService{
     }
 
     @Override
-    public int deleteById(Integer id) {
-        return paymentDao.deleteById(id);
+    public int deleteById(@Param("paymentId") Long paymentId) {
+        return paymentDao.deleteById(paymentId);
     }
 }

@@ -2,6 +2,7 @@ package com.springcloud.service;
 
 import com.springcloud.dao.PaymentDao;
 import com.springcloud.pojo.Payment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,13 @@ public class Paymentlmpl implements PaymentService{
     @Override
     public int create(Payment payment){
         paymentDao.create(payment);
-        int id = payment.getId().intValue();
+        int id = payment.getPaymentId().intValue();
         return id;
     }
 
     @Override
-    public Payment queryById(long id){
-        return paymentDao.queryById(id);
+    public Payment queryById(@Param("paymentId")Long paymentId){
+        return paymentDao.queryById(paymentId);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class Paymentlmpl implements PaymentService{
     }
 
     @Override
-    public int deleteById(Integer id) {
-        return paymentDao.deleteById(id);
+    public int deleteById(@Param("paymentId") Long paymentId) {
+        return paymentDao.deleteById(paymentId);
     }
 }

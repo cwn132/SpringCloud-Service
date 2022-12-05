@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public interface PaymentService {
 
     int create(Payment payment);
-    Payment queryById(long id);
+    Payment queryById(@Param("paymentId")Long paymentId);
     int updateById(Payment payment);
-    int deleteById(@Param("id") Integer id);
+    int deleteById(@Param("paymentId") Long paymentId);
 }

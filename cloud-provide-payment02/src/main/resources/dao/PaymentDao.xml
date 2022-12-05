@@ -9,25 +9,30 @@
     <!-- 1. 如果你搜索只是返回一个值，比如说String ，或者是int，那你直接用resultType就行了-->
     <!-- 2. 如果是返回一个复杂的对象，就可以使用ResultMap-->
     <resultMap id="BaseResultMap" type="com.springcloud.pojo.Payment">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <id column="serial" property="serial" jdbcType="VARCHAR"/>
+        <id column="payment_id" property="paymentId" jdbcType="BIGINT"/>
+        <id column="payment_serial" property="paymentSerial" jdbcType="VARCHAR"/>
+        <id column="payment_price" property="paymentPrice" jdbcType="NUMERIC"/>
+        <id column="payment_totalprice" property="paymentTotalPrice" jdbcType="NUMERIC"/>
+        <id column="payment_num" property="paymentNum" jdbcType="BIGINT"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="product_id" property="productId" jdbcType="BIGINT"/>
     </resultMap>
 
     <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
-    <insert id="create" parameterType="com.springcloud.pojo.Payment" useGeneratedKeys="true" keyProperty="id">
-        insert into payment (serial) values (#{serial});
+    <insert id="create" parameterType="com.springcloud.pojo.Payment" useGeneratedKeys="true" keyProperty="paymentId">
+        insert into payment (payment_serial,payment_price,payment_num) values (#{paymentSerial},#{paymentPrice},#{paymentNum})
     </insert>
 
-    <select id="queryById" resultType="com.springcloud.pojo.Payment" parameterType="Long" resultMap="BaseResultMap">
-        select * from payment where id = #{id};
+    <select id="queryById" resultType="com.springcloud.pojo.Payment" resultMap="BaseResultMap">
+        select * from payment where payment_id=#{paymentId}
     </select>
 
     <update id="updateById" parameterType="com.springcloud.pojo.Payment">
-        update payment set serial=#{serial} where id=#{id};
+        update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_id=#{paymentId};
     </update>
 
-    <delete id="deleteById" parameterType="int">
-        delete from payment where id=#{id};
+    <delete id="deleteById" parameterType="Long">
+        delete from payment where payment_id=#{paymentId}
     </delete>
 
 </mapper>

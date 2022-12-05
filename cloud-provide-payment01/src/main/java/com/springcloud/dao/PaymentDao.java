@@ -18,12 +18,12 @@ public interface PaymentDao {
    int create(Payment payment);
 
    //根据ID查询payment
-   Payment queryById(@Param("id")long id);
+   Payment queryById(@Param("paymentId")Long paymentId);
 
    //根据ID更新payment
    int updateById(Payment payment);
 
    //根据ID删除payment
-   int deleteById(@Param("id")Integer id);
+   int deleteById(@Param("paymentId")Long paymentId);
 
 }

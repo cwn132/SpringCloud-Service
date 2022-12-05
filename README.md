@@ -17,7 +17,7 @@ SpringCloud - NingSpace
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口
 
-2. cloud-provide-payment01 & 02- SpringCloud 服务者01(port:8001)& 02(port:8002) 集群
+2. cloud-provide-payment01 & 02- SpringCloud 订单服务者01(port:8001)& 02(port:8002) 集群
 * 说明：服务端引用Redis缓存与数据库增删改查同步
 * 根据ID获取支付订单方法： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
 ![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/query.jpg)
@@ -29,7 +29,7 @@ SpringCloud - NingSpace
 * 加载服务发现组件discovery - 调用：http://localhost:8001/payment/discovery
 
 
-3. cloud-consumer-order - SpringCloud 消费者 
+3. cloud-consumer-order - SpringCloud 订单消费者 
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8003/consumer/payment/create
 * 根据ID获取支付订单方法： getPaymentById(Id). 调用: http://localhost:8003/consumer/payment/get/{id}
 * 定义负载均衡Ribbon - RandomRule为随机访问服务
@@ -39,7 +39,7 @@ SpringCloud - NingSpace
 * 访问地址eureka02：http://localhost:7002/
 ![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/eureka.jpg)
 
-5. cloud-consumer-feign-order - SpringCloud 消费者服务调用Feign
+5. cloud-consumer-feign-order - SpringCloud 订单消费者服务调用Feign
 * 创建消费端订单接口方法： create(Payment). 调用: http://localhost:8004/consumer/payment/create
 * 根据ID获取支付订单方法： getPaymentById(Id). 调用: http://localhost:8004/consumer/payment/get/{id}
 * 删除订单接口方法： deleteById(Id). 调用：http://localhost:8004/payment/delete/{id}

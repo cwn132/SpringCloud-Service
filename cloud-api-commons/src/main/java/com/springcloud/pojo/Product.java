@@ -1,6 +1,5 @@
 package com.springcloud.pojo;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,18 +10,15 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
-public class Payment implements Serializable {
+public class Product implements Serializable {
 
-    private Long paymentId;
-    private String paymentSerial;
-    private BigDecimal paymentPrice;
-    private BigDecimal paymentTotalPrice;
-    private Long paymentNum;
-    private Timestamp updateTime;
     private Long productId;
+    private String productName;
+    private Long productNum;
+    private Timestamp updateTime;
 
 
 }
