@@ -28,7 +28,7 @@
     </select>
 
     <update id="updateById" parameterType="com.springcloud.pojo.Payment">
-        update payment set payment_serial=#{paymentSerial},payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_id=#{paymentId};
+        update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_id=#{paymentId};
     </update>
 
     <delete id="deleteById" parameterType="Long">

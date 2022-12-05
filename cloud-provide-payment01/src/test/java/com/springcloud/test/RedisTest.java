@@ -45,11 +45,10 @@ public class RedisTest {
 //        BigDecimal totalPrice = payment.getPaymentPrice() * new BigDecimal(payment.getPaymentNum());
 //        payment.setPaymentTotalPrice(totalPrice);
 
-//        BigInteger lostprecision = new BigDecimal(myBI.doubleValue() * d).toBigInteger();
 
-        // 将对象转为json字符串方法
-        String jsonString = JSONObject.toJSONString(payment);
-        System.out.println("jsonString = " + jsonString);
+//        // 将对象转为json字符串方法
+//        String jsonString = JSONObject.toJSONString(payment);
+//        System.out.println("jsonString = " + jsonString);
 
 
 

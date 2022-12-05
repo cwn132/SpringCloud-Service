@@ -61,12 +61,13 @@ public class PaymentController {
     public CommonResult create(@RequestBody Payment payment){
 
         try {
-            int id = paymentService.create(payment);
 
             //计算总价格
             if(payment.getPaymentPrice() != null){
-                payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()));
+                payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
+
+            int id = paymentService.create(payment);
 
             if(id>0){
                 log.info("******插入数据库成功***********"+id);
@@ -120,7 +121,7 @@ public class PaymentController {
 
         //计算总价格
         if(payment.getPaymentPrice() != null){
-            payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()));
+            payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
         }
 
         if(pm == null){

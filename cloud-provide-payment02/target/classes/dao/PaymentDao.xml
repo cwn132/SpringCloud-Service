@@ -20,7 +20,7 @@
 
     <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
     <insert id="create" parameterType="com.springcloud.pojo.Payment" useGeneratedKeys="true" keyProperty="paymentId">
-        insert into payment (payment_serial,payment_price,payment_num) values (#{paymentSerial},#{paymentPrice},#{paymentNum})
+        insert into payment (payment_serial,payment_price,payment_num,payment_totalprice) values (#{paymentSerial},#{paymentPrice},#{paymentNum},#{paymentTotalPrice})
     </insert>
 
     <select id="queryById" resultType="com.springcloud.pojo.Payment" resultMap="BaseResultMap">
