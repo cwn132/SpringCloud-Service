@@ -14,6 +14,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -61,6 +62,11 @@ public class PaymentController {
 
         try {
             int id = paymentService.create(payment);
+
+            //计算总价格
+            if(payment.getPaymentPrice() != null){
+                payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()));
+            }
 
             if(id>0){
                 log.info("******插入数据库成功***********"+id);
@@ -111,6 +117,11 @@ public class PaymentController {
     public CommonResult updateById(@RequestBody Payment payment){
 
         Payment pm = paymentService.queryById(payment.getPaymentId());
+
+        //计算总价格
+        if(payment.getPaymentPrice() != null){
+            payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()));
+        }
 
         if(pm == null){
             log.info("******数据不存在***********"+payment.getPaymentId());
