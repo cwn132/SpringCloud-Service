@@ -18,6 +18,8 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -78,8 +80,8 @@ public class PaymentController {
             if(id>0){
                 log.info("******插入数据库成功***********"+id);
                 //将对象转成Jason
-                String paymentJason = JSONObject.toJSONString(payment);
-                redisUtil.set(String.valueOf(id),paymentJason,CACHE_TIMEOUT, TimeUnit.SECONDS);
+                String paymentJson = JSONObject.toJSONString(payment);
+                redisUtil.set(String.valueOf(id),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
                 log.info("******插入缓存成功***********"+id);
                 return new CommonResult(200,"插入数据库成功",id);
             }else{
@@ -121,6 +123,7 @@ public class PaymentController {
     }
 
     @PostMapping(value="/payment/update") //更新订单
+    @Transactional(propagation = Propagation.REQUIRED)
     public CommonResult updateById(@RequestBody Payment payment){
 
         Payment pm = paymentService.queryById(payment.getPaymentId());
@@ -186,14 +189,14 @@ public class PaymentController {
 
         //缓存没有再查数据库
         Payment payment = paymentService.queryById(paymentId);
-        //将对象转成Jason
-        String paymentJason = JSONObject.toJSONString(payment);
+        //将对象转成Json
+        String paymentJson = JSONObject.toJSONString(payment);
 
         log.info("***************查询结果*********");
         if(payment != null){
             //写入缓存，每次查询续期24小时
-            redisUtil.set(payment.getPaymentId().toString(),paymentJason,CACHE_TIMEOUT, TimeUnit.SECONDS);
-            return new CommonResult(200,"查询成功",paymentJason);
+            redisUtil.set(payment.getPaymentId().toString(),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
+            return new CommonResult(200,"查询成功",paymentJson);
         }else{
             return new CommonResult(444,"查询失败",null);
         }

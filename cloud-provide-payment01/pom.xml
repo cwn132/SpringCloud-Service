@@ -88,9 +88,16 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
+        <!-- 导入Json依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <!-- 导入AOP动态依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
     </dependencies>

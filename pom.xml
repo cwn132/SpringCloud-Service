@@ -112,6 +112,12 @@
                 <artifactId>fastjson</artifactId>
                 <version>1.2.73</version>
             </dependency>
+
+            <!-- 导入AOP动态依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
