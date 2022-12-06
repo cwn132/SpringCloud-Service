@@ -8,7 +8,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.springcloud.dao.PaymentDao;
 import com.springcloud.pojo.CommonResult;
 import com.springcloud.pojo.Payment;
+import com.springcloud.proxy.PaymentJDKProxy;
 import com.springcloud.service.PaymentService;
+import com.springcloud.service.Paymentlmpl;
 import com.springcloud.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +159,11 @@ public class PaymentController {
     //如果方法上的@RequestMapping注解没有设置method属性，则get和post请求默认都可以访问
     @RequestMapping("/payment/lb")
     public int getLB(){
+        //JDK动态代理
+        PaymentJDKProxy proxyHandler = new PaymentJDKProxy(paymentService);
+        PaymentService payProxy = (PaymentService) proxyHandler.getProxy();
+        log.info("payProxy:" + payProxy.queryById(15l));
+
         log.info("serverPort:" + serverPort);
         return this.serverPort;
     }

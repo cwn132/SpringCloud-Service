@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Aspect//标注这个类是切面
 @Component
 @Slf4j
-public class PaymentProxy {
+public class PaymentAspectJProxy {
 
     //定义切入点规则
     // 使用Pointcut注解，execution(切入点的位置)
@@ -22,14 +22,14 @@ public class PaymentProxy {
     //方法定义规则：
     @Before("methodPoint()")
     public void joinBeforePoint() {
-        log.info("========执行方法Before=========");
+        log.info("========AspectJ执行方法Before=========");
     }
 
     //定义织入规则：Before 方法执行前 ；After 方法执行后 ； Around 方法执行前后；参数为切入点的方法名
     //方法定义规则：
     @After("methodPoint()")
     public void joinAfterPoint() {
-        log.info("========执行方法After=========");
+        log.info("========AspectJ执行方法After=========");
     }
 
 

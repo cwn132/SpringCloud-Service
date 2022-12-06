@@ -18,8 +18,7 @@ public class Paymentlmpl implements PaymentService{
     @Override
     public int create(Payment payment){
         paymentDao.create(payment);
-        int id = payment.getPaymentId().intValue();
-        return id;
+        return payment.getPaymentId().intValue();
     }
 
     @Override
