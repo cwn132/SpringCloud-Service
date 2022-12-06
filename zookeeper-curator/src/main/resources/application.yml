@@ -1,0 +1,18 @@
+server:
+  port: 2001
+
+spring:
+  application:
+    name: curatorTest
+
+#这个后来要注入到类里面去的
+curator:
+  #重试retryCount次，当会话超时出现后，curator会每间隔elapsedTimeMs毫秒时间重试一次，共重试retryCount次。
+  retryCount: 5
+  elapsedTimeMs: 5000
+  #服务器信息
+  connectString: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+  #会话超时时间设置
+  sessionTimeoutMs: 60000
+  #连接超时时间
+  connectionTimeoutMs: 5000

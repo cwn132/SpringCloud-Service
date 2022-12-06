@@ -55,4 +55,6 @@ feign:
   hystrix:
     enabled: true
 
-
+zookeeper:
+  address: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+  timeout: 20000

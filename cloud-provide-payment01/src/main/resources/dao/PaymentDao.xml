@@ -27,12 +27,24 @@
         select * from payment where payment_id=#{paymentId}
     </select>
 
+    <select id="queryByPaymentSerial" resultType="com.springcloud.pojo.Payment" resultMap="BaseResultMap">
+        select * from payment where payment_serial=#{paymentSerial}
+    </select>
+
     <update id="updateById" parameterType="com.springcloud.pojo.Payment">
         update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_id=#{paymentId};
     </update>
 
+    <update id="updateByPaymentSerial" parameterType="com.springcloud.pojo.Payment">
+        update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_serial=#{paymentSerial};
+    </update>
+
     <delete id="deleteById" parameterType="Long">
         delete from payment where payment_id=#{paymentId}
+    </delete>
+
+    <delete id="deleteByPaymentSerial" parameterType="String">
+        delete from payment where  payment_serial=#{paymentSerial}
     </delete>
 
 </mapper>

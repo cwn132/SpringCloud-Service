@@ -18,6 +18,7 @@
         <module>cloud-consumer-feign-order</module>
         <module>cloud-consumer-hystrix-dashboar</module>
         <module>cloud-gateway9522</module>
+        <module>zookeeper-curator</module>
 
     </modules>
 
@@ -117,6 +118,19 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>
+
+            <!--Zookeeper-->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.8.0</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>0.10</version>
             </dependency>
         </dependencies>
 

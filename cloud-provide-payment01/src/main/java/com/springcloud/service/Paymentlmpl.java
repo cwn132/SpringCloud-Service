@@ -35,4 +35,22 @@ public class Paymentlmpl implements PaymentService{
     public int deleteById(@Param("paymentId") Long paymentId) {
         return paymentDao.deleteById(paymentId);
     }
+
+    @Override
+    public Payment queryByPaymentSerial(@Param("paymentSerial") String paymentSerial){
+        return paymentDao.queryByPaymentSerial(paymentSerial);
+    }
+
+    @Override
+    public int updateByPaymentSerial(Payment payment) {
+        return paymentDao.updateByPaymentSerial(payment);
+    }
+
+    @Override
+    public int deleteByPaymentSerial(@Param("paymentId") String paymentSerial) {
+        return paymentDao.deleteByPaymentSerial(paymentSerial);
+    }
+
+
+
 }

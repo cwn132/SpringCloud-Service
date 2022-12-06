@@ -8,6 +8,7 @@ SpringCloud - NingSpace
 - Mybatis
 - Maven
 - Redis(master: 192.168.0.102:6379; slave: 192.168.0.102:6378)
+- Zookeeper(127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183) 
 
 # Note:
 - vim /ect/hosts
@@ -59,6 +60,14 @@ SpringCloud - NingSpace
 * 添加Token过滤器加token访问 - http://localhost:9522/payment/lb?token=123
 ![Image text](https://github.com/cwn132/SpringCloud-Service/blob/master/gateway.jpg)
 
+8. zookeeper-curator - Curator操作zookeeper节点
+
+=============================================
+技术点：
+1. 集成Mybatis操作Mysql
+2. AOP动态代理（AspectJ & JDK代理）
+3. 实现Redis缓存查询 
+4. 实现Zookeeper分布式锁
 
 
 

@@ -17,13 +17,14 @@ public interface PaymentDao {
    //创建payment
    int create(Payment payment);
 
-   //根据ID查询payment
+   //根据ID查询,更新,删除payment
    Payment queryById(@Param("paymentId")Long paymentId);
-
-   //根据ID更新payment
    int updateById(Payment payment);
-
-   //根据ID删除payment
    int deleteById(@Param("paymentId")Long paymentId);
+
+   //根据订单编号查询,更新,删除payment
+   Payment queryByPaymentSerial(@Param("paymentSerial")String paymentSerial);
+   int deleteByPaymentSerial(@Param("paymentSerial") String paymentSerial);
+   int updateByPaymentSerial(Payment payment);
 
 }
