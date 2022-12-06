@@ -15,6 +15,13 @@ SpringCloud - NingSpace
 127.0.0.1 eureka7001.com
 127.0.0.1 eureka7002.com
 
+==============================
+技术点：
+1. 集成Mybatis操作Mysql
+2. AOP动态代理（AspectJ & JDK代理）
+3. 实现Redis缓存查询 
+4. 实现Zookeeper分布式锁
+
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口
 
@@ -62,12 +69,7 @@ SpringCloud - NingSpace
 
 8. zookeeper-curator - Curator操作zookeeper节点
 
-=============================================
-技术点：
-1. 集成Mybatis操作Mysql
-2. AOP动态代理（AspectJ & JDK代理）
-3. 实现Redis缓存查询 
-4. 实现Zookeeper分布式锁
+
 
 
 
