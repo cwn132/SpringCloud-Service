@@ -75,11 +75,8 @@ public class PaymentController {
     @PostMapping(value="/payment/create") //创建订单
     public CommonResult create(@RequestBody Payment payment){
 
-        //Zookeeper锁 - 创建临时有序节点
+        //Zookeeper锁 - 创建临时节点
         try {
-
-//            Lock zkLock = new ZkDistributeLock();
-
             try {
                 zkLock.lock();
 
@@ -97,8 +94,6 @@ public class PaymentController {
             if(payment.getPaymentPrice() != null){
                 payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
-
-
 
             int id = paymentService.create(payment);
 
