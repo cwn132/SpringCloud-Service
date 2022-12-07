@@ -1,6 +1,7 @@
 SpringCloud - NingSpace
 ==============================
 * 说明：此项目为临时搭建实现基本增删改查功能，只作参考
+* Github地址：https://github.com/cwn132/SpringCloud-Service
 
 # 一. 基础搭建
 - JDK11
