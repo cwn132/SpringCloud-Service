@@ -30,7 +30,7 @@ SpringCloud - NingSpace
 * 根据ID获取支付订单方法： queryById(Id). 调用: http://localhost:8001/payment/get/{id}
 ![Image text](https://gitee.com/cwn132/SpringCloud-Service/blob/master/query.jpg)
 * 创建订单接口方法： create(Payment). 调用: http://localhost:8001/payment/create
-![Image text](https://gitee.com/cwn132/SpringCloud-Servive/blob/master/create.jpg)
+![Image text](https://gitee.com/cwn132/SpringCloud-Service/blob/master/create.jpg)
 * 根据ID更新订单方法: updateById(Id). 调用：http://localhost:8001/payment/update
 ![Image text](https://gitee.com/cwn132/SpringCloud-Service/blob/master/update.jpg)
 * 删除订单接口方法： deleteById(Id). 调用：http://localhost:8001/payment/delete/{id}
