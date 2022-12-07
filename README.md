@@ -16,7 +16,7 @@ SpringCloud - NingSpace
 127.0.0.1 eureka7002.com
 
 ==============================
-技术点：
+* 技术点：
 1. 集成Mybatis操作Mysql
 2. AOP动态代理（AspectJ & JDK代理）
 3. 实现Redis缓存查询 
