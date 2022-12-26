@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dqueryByidtd/mybatis-3-mapper.dtd">
+
+<!-- namespace用于绑定Dao接口 -->
+<mapper namespace="com.springcloud.dao.StockDao">
+
+    <!-- 定义resultMap, ResultMap和ResultType都是用于设置mybatis增删改查后返回的数据类型-->
+    <!-- 1. 如果你搜索只是返回一个值，比如说String ，或者是int，那你直接用resultType就行了-->
+    <!-- 2. 如果是返回一个复杂的对象，就可以使用ResultMap-->
+    <resultMap id="BaseResultMap" type="com.springcloud.pojo.Stock">
+        <id column="stock_id" property="stockId" jdbcType="BIGINT"/>
+        <id column="stock_num" property="stockNum" jdbcType="BIGINT"/>
+        <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <id column="product_id" property="productId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
+    <insert id="create" parameterType="com.springcloud.pojo.Stock" useGeneratedKeys="true" keyProperty="stockId">
+        insert into stock (stock_num,begin_time,end_time,product_id,stock_serial) values (#{stockNum},#{beginTime},#{endTime},#{productId},#{stockSerial})
+    </insert>
+
+    <select id="queryByProductId" resultType="com.springcloud.pojo.Stock" resultMap="BaseResultMap">
+        select * from stock where product_id=#{productId}
+    </select>
+
+    <update id="updateById" parameterType="com.springcloud.pojo.Stock">
+        update stock set stock_num=#{stockNum},begin_time=#{beginTime},end_time=#{endTime},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where product_id=#{productId};
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from stock where product_id=#{productId}
+    </delete>
+
+    <update id="updateStockByOrder" parameterType="com.springcloud.pojo.Stock">
+        update stock set stock_num=stock_num-#{orderNum},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where product_id=#{productId};
+    </update>
+
+
+</mapper>

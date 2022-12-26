@@ -18,7 +18,8 @@
         <module>cloud-consumer-feign-order</module>
         <module>cloud-consumer-hystrix-dashboar</module>
         <module>cloud-gateway9522</module>
-        <module>zookeeper-curator</module>
+<!--        <module>zookeeper-curator</module>-->
+        <module>cloud-service-stock01</module>
 
     </modules>
 
@@ -131,6 +132,29 @@
                 <groupId>com.101tec</groupId>
                 <artifactId>zkclient</artifactId>
                 <version>0.10</version>
+            </dependency>
+
+            <!--seata-->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-alibaba-seata</artifactId>-->
+<!--                &lt;!&ndash; 剔除spring-cloud-alibaba默认版本，引入了自己对应的版本 &ndash;&gt;-->
+<!--                <exclusions>-->
+<!--                    <exclusion>-->
+<!--                        <artifactId>io.seata</artifactId>-->
+<!--                        <groupId>seata-spring-boot-starter</groupId>-->
+<!--                    </exclusion>-->
+<!--                </exclusions>-->
+<!--            </dependency>-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-seata</artifactId>
+                <version>2.1.1.RELEASE</version>
             </dependency>
         </dependencies>
 

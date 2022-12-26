@@ -21,7 +21,8 @@ SpringCloud - NingSpace
 1. 集成Mybatis操作Mysql
 2. AOP动态代理（AspectJ & JDK代理）
 3. 实现Redis缓存查询 
-4. 实现Zookeeper分布式锁
+4. 实现Zookeeper分布式锁（停用）
+5. 实现Seata分布式事务（AT模式）
 
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口
@@ -68,7 +69,10 @@ SpringCloud - NingSpace
 * 添加Token过滤器加token访问 - http://localhost:9522/payment/lb?token=123
 ![Image text](https://gitee.com/cwn132/SpringCloud-Service/raw/master/gateway.jpg)
 
-8. zookeeper-curator - Curator操作zookeeper节点
+8. cloud-service-stock01 - SpringCloud 库存服务
+* 根据id查询库存：http://localhost:8005/stock/getStockNum/{productId}
+* 根据订单减库存(创建订单时GlobalTransactional-seata分布式事务)：http://localhost:8005/stock/updateStockByOrder/{productId}/{orderNum}
+![Image text](https://gitee.com/cwn132/SpringCloud-Service/raw/master/seata(AT).jpg)
 
 
 

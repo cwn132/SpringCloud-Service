@@ -8,17 +8,17 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @description: 订单编号生成器
+ * @description: 仓库编号生成器
  * @date:
  **/
 @Component
-public class OrderCodeGenerator {
+public class StockCodeGenerator {
 
     /** 自增序列  **/
     private static int i = 0;
 
     /**
-     * 根据当前时间生成订单编号："yyyy-MM-dd-HH-mm-ss-自增序号"
+     * 根据当前时间生成仓库编号："yyyyMMddHHmmss-自增序号"
      * @return
      */
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -36,9 +36,9 @@ public class OrderCodeGenerator {
         return (DateFormat) threadLocal.get();
     }
 
-    public static String generatorOrderCode() {
+    public static String generatorStockCode() {
         try {
-            return "PM"+getDateFormat().format(new Date(System.currentTimeMillis()))
+            return "ST"+getDateFormat().format(new Date(System.currentTimeMillis()))
                     + i++;
         } finally {
             threadLocal.remove();

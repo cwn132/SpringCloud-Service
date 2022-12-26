@@ -1,9 +1,9 @@
 server:
-  port: 8001 #服务端口
+  port: 8005 #服务端口
 #spring相关配置
 spring:
   application:
-    name: mcroservice-payment  #服务名
+    name: mcroservice-stock  #服务名
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource  #当前数据源操作类型
     driver-class-name: org.gjt.mm.mysql.Driver  #数据库驱动包
@@ -38,6 +38,7 @@ spring:
           vgroup-mapping:
             default_tx_group: default
 
+
 #mybatis:配置
 mybatis:
   mapperLocations: classpath:dao/*.xml
@@ -56,7 +57,7 @@ eureka:
       defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/
   instance:
     #服务名称修改
-    instance-id: payment8001
+    instance-id: stock8005
     #访问路径可以显示ip地址
     prefer-ip-address: true
 
@@ -67,3 +68,5 @@ feign:
 #zookeeper:
 #  address: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
 #  timeout: 20000
+
+

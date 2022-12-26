@@ -20,7 +20,7 @@ public class Payment implements Serializable {
     private String paymentSerial;
     private BigDecimal paymentPrice;
     private BigDecimal paymentTotalPrice;
-    private Long paymentNum;
+    private int paymentNum;
     private Timestamp updateTime;
     private Long productId;
 

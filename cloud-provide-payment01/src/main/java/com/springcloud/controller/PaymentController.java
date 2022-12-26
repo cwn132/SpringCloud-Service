@@ -12,6 +12,9 @@ import com.springcloud.proxy.PaymentJDKProxy;
 import com.springcloud.service.PaymentService;
 import com.springcloud.util.RedisUtil;
 import com.springcloud.zookeeper.lock.ZkLock;
+
+
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +23,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,24 +34,24 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PaymentController {
 
+    //调用仓库服务端的ip+端口号
+    public static final  String STOCK_URL = "http://mcroservice-stock";
+
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Autowired
     private RedisUtil redisUtil;
 
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private OrderCodeGenerator orderCodeGenerator;
-
-//    @Autowired
-//    private ZooKeeper zkClient;
-
     //注入服务发现的注解
     @Autowired
     private DiscoveryClient discoveryClient;
 
-    @Autowired
-    private ZkLock zkLock;
+//    @Autowired
+//    private ZkLock zkLock;
 
     @Value("${server.port}")
     private int serverPort;
@@ -70,31 +74,46 @@ public class PaymentController {
         return this.discoveryClient;
     }
 
-
+    @GlobalTransactional(name = "mcroservice-payment", rollbackFor = Exception.class)
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
-    @PostMapping(value="/payment/create") //创建订单
-    public CommonResult create(@RequestBody Payment payment){
+    @PostMapping(value="/payment/create/{productId}") //创建订单
+    public CommonResult create(@RequestBody Payment payment,@PathVariable("productId") int productId){
 
-        //Zookeeper锁 - 创建临时节点
-        try {
-            try {
-                zkLock.lock();
-
-                //新建订单编号
-                String orderSerial =orderCodeGenerator.generatorOrderCode();
-                log.info("orderSerial:"+orderSerial);
-                payment.setPaymentSerial(orderSerial);
-            }catch (Exception e){
-                log.error(e.getMessage());
-            }finally {
-                zkLock.unlock();
+        try{
+            if(Integer.valueOf(payment.getPaymentNum()) instanceof Integer && Integer.valueOf(productId) instanceof Integer){
+                log.info("******输入有效******");
             }
+        }catch (Exception e){
+            return new CommonResult(444,"输入不正确",e.getMessage());
+        }
+
+        //判断订单数量为空
+        if(String.valueOf(payment.getPaymentNum()) == null){
+            return new CommonResult(444,"订单数量为空",null);
+        }
+
+        //查仓库
+        Long stockNum = restTemplate.getForObject(STOCK_URL+"/stock/getStockNum/"+productId,Long.class);
+        log.info("******库存:***********"+stockNum);
+        if (stockNum.intValue() <= 0){
+            return new CommonResult(444,"库存为0",0);
+        }
+
+        //判断库存是否满足订单数量
+        if(payment.getPaymentNum() > stockNum.intValue()){
+            return new CommonResult(444,"库存数量不足",stockNum);
+        }
 
             //计算总价格
             if(payment.getPaymentPrice() != null){
                 payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
             }
 
+            //更新库存
+            Long updateStockNum = restTemplate.getForObject(STOCK_URL+"/stock/updateStockByOrder/"+productId+"/"+payment.getPaymentNum(),Long.class);
+            log.info("******更新仓库成功***********"+updateStockNum);
+
+            payment.setPaymentSerial(OrderCodeGenerator.generatorOrderCode());
             int id = paymentService.create(payment);
 
             if(id>0){
@@ -103,18 +122,94 @@ public class PaymentController {
                 String paymentJson = JSONObject.toJSONString(payment);
                 redisUtil.set(String.valueOf(payment.getPaymentSerial()),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
                 log.info("******插入缓存成功***********"+payment.getPaymentSerial());
-                return new CommonResult(200,"插入数据库成功",paymentJson);
+
+                return new CommonResult(200,"新建订单成功",paymentJson);
+
             }else{
                 log.info("******插入数据库失败***********"+payment.getPaymentSerial());
-                return new CommonResult(444,"插入数据库失败",null);
+                return new CommonResult(444,"新建订单失败",null);
             }
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
-
-        return null;
 
     }
+
+//    @PostMapping(value="/payment/create/{productId}") //创建订单
+//    public CommonResult create(@RequestBody Payment payment,@PathVariable("productId") int productId){
+//
+//        try{
+//            if(Integer.valueOf(payment.getPaymentNum()) instanceof Integer && Integer.valueOf(productId) instanceof Integer){
+//                log.info("******输入有效******");
+//            }
+//        }catch (Exception e){
+//            return new CommonResult(444,"输入不正确",e.getMessage());
+//        }
+//
+//        //判断库存数量
+//        if(String.valueOf(payment.getPaymentNum()) == null){
+//            return new CommonResult(444,"订单数量为空",null);
+//        }
+//
+//        //查仓库
+//        Long stockNum = restTemplate.getForObject(STOCK_URL+"/stock/getStockNum/"+productId,Long.class);
+//        log.info("******库存:***********"+stockNum);
+//        if (stockNum.intValue() <= 0){
+//            return new CommonResult(444,"库存为0",0);
+//        }
+//
+//        //判断库存是否满足订单数量
+//        if(payment.getPaymentNum() > stockNum.intValue()){
+//            return new CommonResult(444,"库存数量不足",stockNum);
+//        }
+//
+//        //Zookeeper锁 - 创建临时节点
+////        try {
+////            try {
+////                zkLock.lock();
+////
+////                //新建订单编号
+////                String orderSerial =OrderCodeGenerator.generatorOrderCode();
+////                log.info("orderSerial:"+orderSerial);
+////                payment.setPaymentSerial(orderSerial);
+////            }catch (Exception e){
+////                log.error(e.getMessage());
+////            }finally {
+////                zkLock.unlock();
+////            }
+//        //新建订单编号
+//        String orderSerial =OrderCodeGenerator.generatorOrderCode();
+//
+//        //计算总价格
+//        if(payment.getPaymentPrice() != null){
+//            payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
+//        }
+//
+//        int id = paymentService.create(payment);
+//
+//        if(id>0){
+//            log.info("******插入数据库成功***********"+payment.getPaymentSerial());
+//            //将对象转成Jason
+//            String paymentJson = JSONObject.toJSONString(payment);
+//            redisUtil.set(String.valueOf(payment.getPaymentSerial()),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
+//            log.info("******插入缓存成功***********"+payment.getPaymentSerial());
+//
+//            //更新库存
+//            Long updateStockNum = stockNum - payment.getPaymentNum();
+//            updateStockNum = restTemplate.getForObject(STOCK_URL+"/stock/updateStockNum/"+productId+"/"+updateStockNum,Long.class);
+//            log.info("******更新仓库成功***********"+updateStockNum);
+//
+//            return new CommonResult(200,"新建订单成功",paymentJson);
+//
+//        }else{
+//            log.info("******插入数据库失败***********"+payment.getPaymentSerial());
+//            return new CommonResult(444,"新建订单失败",null);
+//        }
+////        }catch (Exception e){
+////            log.error(e.getMessage());
+////        }
+//
+////        return null;
+//
+//    }
+
 
     @GetMapping(value="/payment/delete/{paymentId}") //删除订单
     public CommonResult deleteById(@PathVariable("paymentId") Long paymentId){
@@ -142,7 +237,7 @@ public class PaymentController {
     }
 
     @PostMapping(value="/payment/update") //更新订单
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public CommonResult updateById(@RequestBody Payment payment){
 
         Payment pm = paymentService.queryById(payment.getPaymentId());
@@ -179,7 +274,7 @@ public class PaymentController {
         //JDK动态代理
         PaymentJDKProxy proxyHandler = new PaymentJDKProxy(paymentService);
         PaymentService payProxy = (PaymentService) proxyHandler.getProxy();
-        log.info("payProxy:" + payProxy.queryById(15l));
+        log.info("payProxy:" + payProxy.queryById(15L));
 
         log.info("serverPort:" + serverPort);
         return this.serverPort;
@@ -207,7 +302,7 @@ public class PaymentController {
         log.info("paymentId:"+paymentId);
         //先查缓存
         String paymentOrder = redisUtil.get(paymentId.toString());
-        if(paymentOrder != null && !"null".equals(paymentOrder)){
+        if(paymentOrder != null ){
             log.info("******查询缓存成功***********" + paymentOrder);
             return new CommonResult(200,"查询成功",paymentOrder);
         }
@@ -248,7 +343,7 @@ public class PaymentController {
         log.info("paymentSerial:"+paymentSerial);
         //先查缓存
         String paymentOrder = redisUtil.get(paymentSerial);
-        if(paymentOrder != null && !"null".equals(paymentOrder)){
+        if(paymentOrder != null ){
             log.info("******查询缓存成功***********" + paymentOrder);
             return new CommonResult(200,"查询成功",paymentOrder);
         }
