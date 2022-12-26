@@ -22,7 +22,9 @@ SpringCloud - NingSpace
 2. AOP动态代理（AspectJ & JDK代理）
 3. 实现Redis缓存查询 
 4. 实现Zookeeper分布式锁（停用）
-5. 实现Seata分布式事务（AT模式）
+5. 实现Seata分布式事务
+* Seata AT模式-创建订单和库存服务调用: http://localhost:8001/payment/create/{productId}
+* Seata TCC模式-创建订单和库存服务调用: http://localhost:8001/payment/add/{productId}
 
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口

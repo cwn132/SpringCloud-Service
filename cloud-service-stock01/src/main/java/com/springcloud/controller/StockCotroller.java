@@ -157,5 +157,19 @@ public class StockCotroller {
         return 0;
     }
 
+    @GetMapping("/stock/decrease/{productId}/{orderNum}")
+    public boolean decrease(@PathVariable("productId")  int productId,@PathVariable("orderNum")  int orderNum){
+
+        boolean success = stockService.decrease(productId,orderNum);
+
+        if(success){
+            log.info("********减少库存成功*********");
+            return true;
+        }else{
+            log.info("********减少库存失败*********");
+            return false;
+        }
+    }
+
 
 }

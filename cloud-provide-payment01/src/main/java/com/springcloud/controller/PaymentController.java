@@ -74,7 +74,7 @@ public class PaymentController {
         return this.discoveryClient;
     }
 
-    @GlobalTransactional(name = "mcroservice-payment", rollbackFor = Exception.class)
+    @GlobalTransactional(name = "mcroservice-payment", rollbackFor = Exception.class) //Seata AT模式
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
     @PostMapping(value="/payment/create/{productId}") //创建订单
     public CommonResult create(@RequestBody Payment payment,@PathVariable("productId") int productId){
@@ -131,6 +131,73 @@ public class PaymentController {
             }
 
     }
+
+    //TCC事务
+    @GlobalTransactional(name = "mcroservice-payment", rollbackFor = Exception.class)
+    @PostMapping(value="/payment/add/{productId}") //创建订单
+    public CommonResult add(@RequestBody Payment payment,@PathVariable("productId") int productId){
+
+        try{
+            if(Integer.valueOf(payment.getPaymentNum()) instanceof Integer && Integer.valueOf(productId) instanceof Integer){
+                log.info("******输入有效******");
+            }
+        }catch (Exception e){
+            return new CommonResult(444,"输入不正确",e.getMessage());
+        }
+
+        //判断订单数量为空
+        if(String.valueOf(payment.getPaymentNum()) == null){
+            return new CommonResult(444,"订单数量为空",null);
+        }
+
+        //查仓库
+        Long stockNum = restTemplate.getForObject(STOCK_URL+"/stock/getStockNum/"+productId,Long.class);
+        log.info("******库存:***********"+stockNum);
+        if (stockNum.intValue() <= 0){
+            return new CommonResult(444,"库存为0",0);
+        }
+
+        //判断库存是否满足订单数量
+        if(payment.getPaymentNum() > stockNum.intValue()){
+            return new CommonResult(444,"库存数量不足",stockNum);
+        }
+
+        //计算总价格
+        if(payment.getPaymentPrice() != null){
+            payment.setPaymentTotalPrice(new BigDecimal(payment.getPaymentPrice().doubleValue()*payment.getPaymentNum()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        }
+
+        //更新库存
+        boolean success = restTemplate.getForObject(STOCK_URL+"/stock/decrease/"+productId+"/"+payment.getPaymentNum(),Boolean.class);
+        if(success){
+            log.info("******减少库存成功***********");
+        }else {
+            log.info("******减少库存失败***********");
+        }
+
+
+
+        //创建订单
+        payment.setPaymentSerial(OrderCodeGenerator.generatorOrderCode());
+        payment.setProductId((long) productId);
+        int id = paymentService.add(payment);
+
+        if(id>0){
+            log.info("******插入数据库成功***********"+payment.getPaymentSerial());
+            //将对象转成Jason
+            String paymentJson = JSONObject.toJSONString(payment);
+            redisUtil.set(String.valueOf(payment.getPaymentSerial()),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
+            log.info("******插入缓存成功***********"+payment.getPaymentSerial());
+
+            return new CommonResult(200,"新建订单成功",paymentJson);
+
+        }else{
+            log.info("******插入数据库失败***********"+payment.getPaymentSerial());
+            return new CommonResult(444,"新建订单失败",null);
+        }
+
+    }
+
 
 //    @PostMapping(value="/payment/create/{productId}") //创建订单
 //    public CommonResult create(@RequestBody Payment payment,@PathVariable("productId") int productId){

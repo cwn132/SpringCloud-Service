@@ -1,5 +1,6 @@
 package com.springcloud.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.springcloud.pojo.Stock;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,5 +22,5 @@ public interface StockDao {
     int deleteById(@Param("productId")Long productId);
     int updateStockByOrder(@Param("productId")Long productId,@Param("orderNum")int orderNum);
 
-
+    Stock queryById(@Param("productId") LambdaQueryWrapper<Stock> productId);
 }

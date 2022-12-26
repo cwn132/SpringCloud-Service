@@ -13,19 +13,24 @@
         <id column="stock_num" property="stockNum" jdbcType="BIGINT"/>
         <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <id column="product_id" property="productId" jdbcType="BIGINT"/>
+        <id column="frozen_storage" property="frozenStorage" jdbcType="BIGINT"/>
     </resultMap>
 
     <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
     <insert id="create" parameterType="com.springcloud.pojo.Stock" useGeneratedKeys="true" keyProperty="stockId">
-        insert into stock (stock_num,begin_time,end_time,product_id,stock_serial) values (#{stockNum},#{beginTime},#{endTime},#{productId},#{stockSerial})
+        insert into stock (stock_id,stock_num,product_id,stock_serial) values (null,#{stockNum},#{productId},#{stockSerial})
     </insert>
 
     <select id="queryByProductId" resultType="com.springcloud.pojo.Stock" resultMap="BaseResultMap">
         select * from stock where product_id=#{productId}
     </select>
 
+    <select id="queryById" resultType="com.springcloud.pojo.Stock" resultMap="BaseResultMap">
+        select * from stock where product_id=#{productId}
+    </select>
+
     <update id="updateById" parameterType="com.springcloud.pojo.Stock">
-        update stock set stock_num=#{stockNum},begin_time=#{beginTime},end_time=#{endTime},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where product_id=#{productId};
+        update stock set frozen_storage=#{frozenStorage},stock_num=#{stockNum},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where product_id=#{productId};
     </update>
 
     <delete id="deleteById" parameterType="Long">

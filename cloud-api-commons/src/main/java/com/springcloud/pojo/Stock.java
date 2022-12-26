@@ -21,5 +21,6 @@ public class Stock {
     private Timestamp updateTime;
     private Timestamp beginTime;
     private Timestamp endTime;
+    private int frozenStorage;
 
 }

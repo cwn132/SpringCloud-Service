@@ -16,11 +16,13 @@
         <id column="payment_num" property="paymentNum" jdbcType="BIGINT"/>
         <id column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <id column="product_id" property="productId" jdbcType="BIGINT"/>
+        <id column="payment_status" property="paymentStatus" jdbcType="BIGINT"/>
     </resultMap>
 
     <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
     <insert id="create" parameterType="com.springcloud.pojo.Payment" useGeneratedKeys="true" keyProperty="paymentId">
-        insert into payment (payment_id,payment_serial,payment_price,payment_num,payment_totalprice) values (null,#{paymentSerial},#{paymentPrice},#{paymentNum},#{paymentTotalPrice})
+        <selectKey keyProperty="paymentId" keyColumn="paymentId" resultType="long" order="AFTER"> SELECT LAST_INSERT_ID() </selectKey>
+        insert into payment (payment_id,payment_serial,payment_price,payment_num,payment_totalprice,payment_status,product_id) values (null,#{paymentSerial},#{paymentPrice},#{paymentNum},#{paymentTotalPrice},#{paymentStatus},#{productId})
     </insert>
 
     <select id="queryById" resultType="com.springcloud.pojo.Payment" resultMap="BaseResultMap">
@@ -32,19 +34,27 @@
     </select>
 
     <update id="updateById" parameterType="com.springcloud.pojo.Payment">
-        update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_id=#{paymentId};
+        update payment set payment_status=#{paymentStatus},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s'),payment_status=#{paymentStatus} where payment_id=#{paymentId};
     </update>
 
     <update id="updateByPaymentSerial" parameterType="com.springcloud.pojo.Payment">
-        update payment set payment_num=#{paymentNum},payment_price=#{paymentPrice},payment_totalprice=#{paymentTotalPrice},update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where payment_serial=#{paymentSerial};
+        update payment set
+        payment_num=#{paymentNum},
+        payment_num=#{paymentNum},
+        payment_price=#{paymentPrice},
+        payment_totalprice=#{paymentTotalPrice},
+        payment_status=#{paymentStatus},
+        update_time=DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s')
+        where payment_status = 0 and payment_serial=#{paymentSerial};
     </update>
+
+    <delete id="deleteByPaymentSerial" parameterType="String">
+        delete from payment where payment_serial=#{paymentSerial} and  payment_status = 0
+    </delete>
+
 
     <delete id="deleteById" parameterType="Long">
         delete from payment where payment_id=#{paymentId}
-    </delete>
-
-    <delete id="deleteByPaymentSerial" parameterType="String">
-        delete from payment where  payment_serial=#{paymentSerial}
     </delete>
 
 </mapper>

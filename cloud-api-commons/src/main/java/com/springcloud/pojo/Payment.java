@@ -23,6 +23,7 @@ public class Payment implements Serializable {
     private int paymentNum;
     private Timestamp updateTime;
     private Long productId;
+    private int paymentStatus;
 
 
 }
