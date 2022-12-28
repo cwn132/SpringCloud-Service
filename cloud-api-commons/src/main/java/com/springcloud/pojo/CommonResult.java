@@ -11,12 +11,13 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)  //用于配置getter和setter方法的生成结果, chain的中文含义是链式的，设置为true，则setter方法返回当前对象
 public class CommonResult<T> {
 
-    private Integer code; //返回状态码
+    private Integer status; //返回状态码
     private String message; //返回是否调用成功
     private T data; //返回的数据
+    private int total; //返回总条数
 
-    public CommonResult(Integer code, String message) {
-        this(code,message,null);
+    public CommonResult(Integer status, String message,int total) {
+        this(status,message,null,total);
     }
 }
 

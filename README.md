@@ -25,6 +25,8 @@ SpringCloud - NingSpace
 5. 实现Seata分布式事务
 * Seata AT模式-创建订单和库存服务调用: http://localhost:8001/payment/create/{productId}
 * Seata TCC模式-创建订单和库存服务调用: http://localhost:8001/payment/add/{productId}
+6. 联动Vue前后端分离 - https://github.com/cwn132/demo-vue
+
 
 # 二. 目录结构描述
 1. cloud-api-commons - SpringCloud API公共接口
@@ -76,7 +78,8 @@ SpringCloud - NingSpace
 * 根据订单减库存(创建订单时GlobalTransactional-seata分布式事务)：http://localhost:8005/stock/updateStockByOrder/{productId}/{orderNum}
 ![Image text](https://gitee.com/cwn132/SpringCloud-Service/raw/master/seata(AT).jpg)
 
-
+9. Vue前端管理系统
+![Image text](https://gitee.com/cwn132/SpringCloud-Service/raw/master/vue-payment.jpg)
 
 
 

@@ -78,7 +78,7 @@ public class PaymentController {
                 return new CommonResult(200,"插入数据库成功",id);
             }else{
                 log.info("******插入数据库失败***********"+id);
-                return new CommonResult(444,"插入数据库失败",null);
+                return new CommonResult(444,"插入数据库失败",null,0);
             }
         }catch (Exception e){
             log.error(e.getMessage());
@@ -95,7 +95,7 @@ public class PaymentController {
 
         if(payment == null){
             log.info("******数据不存在***********"+paymentId);
-            return new CommonResult(200,"数据不存在",paymentId);
+            return new CommonResult(200,"数据不存在",paymentId,0);
         }else {
             try{
                 //根据id删除数据库记录
@@ -104,7 +104,7 @@ public class PaymentController {
                 //根据id删除缓存
                 redisUtil.delete(paymentId.toString());
                 log.info("******删除缓存成功***********"+paymentId);
-                return new CommonResult(200,"删除成功",paymentId);
+                return new CommonResult(200,"删除成功",paymentId,0);
             }catch (Exception e){
                 log.error(e.getMessage());
             }
@@ -126,7 +126,7 @@ public class PaymentController {
 
         if(pm == null){
             log.info("******数据不存在***********"+payment.getPaymentId());
-            return new CommonResult(200,"数据不存在",payment.getPaymentId());
+            return new CommonResult(200,"数据不存在",payment.getPaymentId(),0);
         }else {
             try {
                 //根据id更新数据库
@@ -136,7 +136,7 @@ public class PaymentController {
                 //根据id更新缓存
                 redisUtil.update(payment.getPaymentId().toString(),paymentJason);
                 log.info("******更新成功***********" + payment.getPaymentId());
-                return new CommonResult(200, "更新成功", paymentJason);
+                return new CommonResult(200, "更新成功", paymentJason,0);
             }catch (Exception e){
                 log.error(e.getMessage());
             }
@@ -162,7 +162,7 @@ public class PaymentController {
         String paymentOrder = redisUtil.get(paymentId.toString());
         if(paymentOrder != null && !"null".equals(paymentOrder)){
             log.info("******查询缓存成功***********" + paymentOrder);
-            return new CommonResult(200,"查询成功",paymentOrder);
+            return new CommonResult(200,"查询成功",paymentOrder,0);
         }
 
         //缓存没有再查数据库
@@ -174,16 +174,16 @@ public class PaymentController {
         if(payment != null){
             //写入缓存，每次查询续期24小时
             redisUtil.set(payment.getPaymentId().toString(),paymentJason,CACHE_TIMEOUT, TimeUnit.SECONDS);
-            return new CommonResult(200,"查询成功",paymentJason);
+            return new CommonResult(200,"查询成功",paymentJason,0);
         }else{
-            return new CommonResult(444,"查询失败",null);
+            return new CommonResult(444,"查询失败",null,0);
         }
     }
 
     //定义 GetError 的降级方法
     //方法的返回值、参数列表、参数类型，要与原方法保持一致
     public CommonResult getErrorFallback(Long paymentId) {
-        return new CommonResult(500,"服务端异常",paymentId);
+        return new CommonResult(500,"服务端异常",paymentId,0);
     }
 
 

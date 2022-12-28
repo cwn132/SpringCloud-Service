@@ -42,7 +42,7 @@ public class StockCotroller {
 //            }
 
         if (stock.getProductId() == null){
-            return new CommonResult(444,"商品ID为空",null);
+            return new CommonResult(444,"商品ID为空",null,0);
         }
 
 
@@ -57,10 +57,10 @@ public class StockCotroller {
         if(i>0){
             redisUtil.set(stock.getProductId().toString(),String.valueOf(stock.getStockNum()));
             log.info("********插入库存和缓存成功*********"+stock.getProductId());
-            return new CommonResult(200,"插入库存成功",stock.getProductId());
+            return new CommonResult(200,"插入库存成功",stock.getProductId(),0);
         }else{
             log.info("********插入库存失败*********"+stock.getProductId());
-            return new CommonResult(444,"插入库存失败",stock.getProductId());
+            return new CommonResult(444,"插入库存失败",stock.getProductId(),0);
         }
     }
 

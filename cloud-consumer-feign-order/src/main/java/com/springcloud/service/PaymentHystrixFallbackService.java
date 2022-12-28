@@ -21,17 +21,17 @@ public class PaymentHystrixFallbackService implements PaymentService{
     @Override
     public CommonResult queryById(Long id) {
         //访问远程服务失败，这些处理逻辑就可以写在该方法中
-        return new CommonResult(500,"服务器异常",id);
+        return new CommonResult(500,"服务器异常",id,0);
     }
 
     @Override
     public CommonResult updateById(Payment payment) {
-        return new CommonResult(500,"服务器异常",null);
+        return new CommonResult(500,"服务器异常",null,0);
     }
 
     @Override
     public CommonResult deleteById(Integer id) {
-        return new CommonResult(500,"服务器异常",null);
+        return new CommonResult(500,"服务器异常",null,0);
     }
 
     @Override

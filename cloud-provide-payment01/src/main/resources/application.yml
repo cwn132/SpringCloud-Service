@@ -7,7 +7,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource  #当前数据源操作类型
     driver-class-name: org.gjt.mm.mysql.Driver  #数据库驱动包
-    url: jdbc:mysql://localhost:3306/db01?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://localhost:3306/db01?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true
     username: root
     password: 19887460
   redis:
@@ -42,7 +42,6 @@ spring:
 mybatis:
   mapperLocations: classpath:dao/*.xml
   type-aliases-package: com.springcloud.pojo    # 所有pojo别名类所在包
-
 
 #eureka配置
 eureka:

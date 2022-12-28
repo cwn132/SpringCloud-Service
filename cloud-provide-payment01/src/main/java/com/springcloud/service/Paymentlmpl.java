@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 
+import java.util.List;
+
 
 @Service //加上该注解会将当前类自动注入到spring容器中，不需要再在applicationContext.xml文件定义bean了。
 @Slf4j
@@ -29,6 +31,11 @@ public class Paymentlmpl implements PaymentService{
     public int create(Payment payment){
         paymentDao.create(payment);
         return payment.getPaymentId().intValue();
+    }
+
+    @Override
+    public List<Object> queryAllPayment(){
+        return paymentDao.queryAllPayment();
     }
 
     @Override

@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 /**
  * 数据源代理
  */
-@Configuration
+//@Configuration
 public class DataSourceConfiguration {
 
     @Bean

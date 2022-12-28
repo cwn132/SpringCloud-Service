@@ -19,6 +19,10 @@
         <id column="payment_status" property="paymentStatus" jdbcType="BIGINT"/>
     </resultMap>
 
+    <resultMap id="count" type="java.lang.Integer">
+        <result column="total"/>
+    </resultMap>
+
     <!-- useGeneratedKeys设置为 true 时，表示如果插入的表id以自增列为主键，则允许 JDBC 支持自动生成主键，并可将自动生成的主键id返回。-->
     <insert id="create" parameterType="com.springcloud.pojo.Payment" useGeneratedKeys="true" keyProperty="paymentId">
         <selectKey keyProperty="paymentId" keyColumn="paymentId" resultType="long" order="AFTER"> SELECT LAST_INSERT_ID() </selectKey>
@@ -52,9 +56,14 @@
         delete from payment where payment_serial=#{paymentSerial} and  payment_status = 0
     </delete>
 
-
     <delete id="deleteById" parameterType="Long">
         delete from payment where payment_id=#{paymentId}
     </delete>
+
+    <select id="queryAllPayment" resultMap="BaseResultMap,count">
+        select a.payment_id,a.payment_serial,a.product_id,a.payment_num,a.payment_status,a.payment_totalprice
+        from payment a order by a.payment_id;
+        SELECT FOUND_ROWS() AS total;
+    </select>
 
 </mapper>

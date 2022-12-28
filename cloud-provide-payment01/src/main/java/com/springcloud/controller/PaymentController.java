@@ -2,6 +2,7 @@ package com.springcloud.controller;
 
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -16,12 +17,14 @@ import com.springcloud.zookeeper.lock.ZkLock;
 
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -74,6 +77,24 @@ public class PaymentController {
         return this.discoveryClient;
     }
 
+    @GetMapping("/payment/queryAllPayment")
+    public CommonResult queryAllPayment(){
+        List<Object> list = paymentService.queryAllPayment();
+        List<Payment> paymentList = (List<Payment>) list.get(0); //数据集合
+        Integer total = ((List<Integer>) list.get(1)).get(0);//总量
+
+        log.info("paymentList:{}",paymentList);
+        log.info("total:{}",total);
+
+        if(total == 0){
+            return new CommonResult(444,"没有数据",null,total);
+        }
+        //将对象转成Json
+        JSONArray paymentArray= JSONArray.parseArray(JSONObject.toJSONString(paymentList));
+        log.info("paymentArray:{}",paymentArray);
+        return new CommonResult(200,"查询成功",paymentArray,total);
+    }
+
     @GlobalTransactional(name = "mcroservice-payment", rollbackFor = Exception.class) //Seata AT模式
     //作为@RequestMapping(value="/payment/create",method = RequestMethod.POST)的快捷方式。也就是可以简化成@PostMapping(value="/payment/create" )即可
     @PostMapping(value="/payment/create/{productId}") //创建订单
@@ -84,12 +105,12 @@ public class PaymentController {
                 log.info("******输入有效******");
             }
         }catch (Exception e){
-            return new CommonResult(444,"输入不正确",e.getMessage());
+            return new CommonResult(444,"输入不正确",e.getMessage(),0);
         }
 
         //判断订单数量为空
         if(String.valueOf(payment.getPaymentNum()) == null){
-            return new CommonResult(444,"订单数量为空",null);
+            return new CommonResult(444,"订单数量为空",null,0);
         }
 
         //查仓库
@@ -101,7 +122,7 @@ public class PaymentController {
 
         //判断库存是否满足订单数量
         if(payment.getPaymentNum() > stockNum.intValue()){
-            return new CommonResult(444,"库存数量不足",stockNum);
+            return new CommonResult(444,"库存数量不足",stockNum,0);
         }
 
             //计算总价格
@@ -123,11 +144,11 @@ public class PaymentController {
                 redisUtil.set(String.valueOf(payment.getPaymentSerial()),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
                 log.info("******插入缓存成功***********"+payment.getPaymentSerial());
 
-                return new CommonResult(200,"新建订单成功",paymentJson);
+                return new CommonResult(200,"新建订单成功",paymentJson,0);
 
             }else{
                 log.info("******插入数据库失败***********"+payment.getPaymentSerial());
-                return new CommonResult(444,"新建订单失败",null);
+                return new CommonResult(444,"新建订单失败",null,0);
             }
 
     }
@@ -142,12 +163,12 @@ public class PaymentController {
                 log.info("******输入有效******");
             }
         }catch (Exception e){
-            return new CommonResult(444,"输入不正确",e.getMessage());
+            return new CommonResult(444,"输入不正确",e.getMessage(),0);
         }
 
         //判断订单数量为空
         if(String.valueOf(payment.getPaymentNum()) == null){
-            return new CommonResult(444,"订单数量为空",null);
+            return new CommonResult(444,"订单数量为空",null,0);
         }
 
         //查仓库
@@ -159,7 +180,7 @@ public class PaymentController {
 
         //判断库存是否满足订单数量
         if(payment.getPaymentNum() > stockNum.intValue()){
-            return new CommonResult(444,"库存数量不足",stockNum);
+            return new CommonResult(444,"库存数量不足",stockNum,0);
         }
 
         //计算总价格
@@ -189,11 +210,11 @@ public class PaymentController {
             redisUtil.set(String.valueOf(payment.getPaymentSerial()),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
             log.info("******插入缓存成功***********"+payment.getPaymentSerial());
 
-            return new CommonResult(200,"新建订单成功",paymentJson);
+            return new CommonResult(200,"新建订单成功",paymentJson,0);
 
         }else{
             log.info("******插入数据库失败***********"+payment.getPaymentSerial());
-            return new CommonResult(444,"新建订单失败",null);
+            return new CommonResult(444,"新建订单失败",null,0);
         }
 
     }
@@ -285,7 +306,7 @@ public class PaymentController {
 
         if(payment == null){
             log.info("******数据不存在***********"+paymentId);
-            return new CommonResult(200,"数据不存在",paymentId);
+            return new CommonResult(200,"数据不存在",paymentId,0);
         }else {
             try{
                 //根据id删除数据库记录
@@ -294,7 +315,7 @@ public class PaymentController {
                 //根据id删除缓存
                 redisUtil.delete(paymentId.toString());
                 log.info("******删除缓存成功***********"+paymentId);
-                return new CommonResult(200,"删除成功",paymentId);
+                return new CommonResult(200,"删除成功",paymentId,0);
             }catch (Exception e){
                 log.error(e.getMessage());
             }
@@ -316,7 +337,7 @@ public class PaymentController {
 
         if(pm == null){
             log.info("******数据不存在***********"+payment.getPaymentId());
-            return new CommonResult(200,"数据不存在",payment.getPaymentId());
+            return new CommonResult(200,"数据不存在",payment.getPaymentId(),0);
         }else {
             try {
                 //根据id更新数据库
@@ -326,7 +347,7 @@ public class PaymentController {
                 //根据id更新缓存
                 redisUtil.update(payment.getPaymentId().toString(),paymentJason);
                 log.info("******更新成功***********" + payment.getPaymentId());
-                return new CommonResult(200, "更新成功", paymentJason);
+                return new CommonResult(200, "更新成功", paymentJason,0);
             }catch (Exception e){
                 log.error(e.getMessage());
             }
@@ -371,7 +392,7 @@ public class PaymentController {
         String paymentOrder = redisUtil.get(paymentId.toString());
         if(paymentOrder != null ){
             log.info("******查询缓存成功***********" + paymentOrder);
-            return new CommonResult(200,"查询成功",paymentOrder);
+            return new CommonResult(200,"查询成功",paymentOrder,0);
         }
 
         //缓存没有再查数据库
@@ -383,9 +404,9 @@ public class PaymentController {
         if(payment != null){
             //写入缓存，每次查询续期24小时
             redisUtil.set(payment.getPaymentId().toString(),paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
-            return new CommonResult(200,"查询成功",paymentJson);
+            return new CommonResult(200,"查询成功",paymentJson,0);
         }else{
-            return new CommonResult(444,"查询失败",null);
+            return new CommonResult(444,"查询失败",null,0);
         }
     }
 
@@ -412,7 +433,7 @@ public class PaymentController {
         String paymentOrder = redisUtil.get(paymentSerial);
         if(paymentOrder != null ){
             log.info("******查询缓存成功***********" + paymentOrder);
-            return new CommonResult(200,"查询成功",paymentOrder);
+            return new CommonResult(200,"查询成功",paymentOrder,0);
         }
 
         //缓存没有再查数据库
@@ -424,20 +445,20 @@ public class PaymentController {
         if(payment != null){
             //写入缓存，每次查询续期24小时
             redisUtil.set(paymentSerial,paymentJson,CACHE_TIMEOUT, TimeUnit.SECONDS);
-            return new CommonResult(200,"查询成功",paymentJson);
+            return new CommonResult(200,"查询成功",paymentJson,0);
         }else{
-            return new CommonResult(444,"查询失败",null);
+            return new CommonResult(444,"查询失败",null,0);
         }
     }
 
     //定义 GetError 的降级方法
     //方法的返回值、参数列表、参数类型，要与原方法保持一致
     public CommonResult getErrorFallbackById(Long paymentId) {
-        return new CommonResult(500,"服务端异常",paymentId);
+        return new CommonResult(500,"服务端异常",paymentId,0);
     }
 
     public CommonResult getErrorFallbackByPaymentSerial(String paymentSerial) {
-        return new CommonResult(500,"服务端异常",paymentSerial);
+        return new CommonResult(500,"服务端异常",paymentSerial,0);
     }
 
 }

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.Mapping;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 
 //mybatis支持的映射方式有基于xml的mapper.xml文件、基于java的使用Mapper接口class。
 //从mybatis3.4.0开始加入了@Mapper注解，目的就是为了不再写mapper映射文件。
@@ -26,5 +28,8 @@ public interface PaymentDao {
    Payment queryByPaymentSerial(@Param("paymentSerial")String paymentSerial);
    int deleteByPaymentSerial(@Param("paymentSerial") String paymentSerial);
    int updateByPaymentSerial(Payment payment);
+
+   //查询所有订单
+   List<Object> queryAllPayment();
 
 }

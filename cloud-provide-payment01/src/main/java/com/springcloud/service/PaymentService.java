@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @LocalTCC
 public interface PaymentService {
 
@@ -23,6 +25,8 @@ public interface PaymentService {
     Payment queryByPaymentSerial(@Param("paymentSerial")String paymentSerial);
     int deleteByPaymentSerial(@Param("paymentSerial") String paymentSerial);
     int updateByPaymentSerial(Payment payment);
+
+    List<Object> queryAllPayment();
 
     /**
      * @TwoPhaseBusinessAction 描述⼆阶段提交
